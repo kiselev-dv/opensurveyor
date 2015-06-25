@@ -1,12 +1,12 @@
 package devedroid.opensurveyor.data;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.Writer;
-import java.util.Locale;
-
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Locale;
 
 public class LocationData implements Serializable{
 	
@@ -47,17 +47,22 @@ public class LocationData implements Serializable{
 	public boolean hasAltitude() { return !Double.isNaN(alt); }
 	
 	
-	public void writeLocationTag(Writer w) throws IOException {
-		w.append(String.format(Locale.US, 
-				"\t\t<position lat=\"%.6f\" lon=\"%.6f\" ", 
-				lat, lon));
-		if(hasHeading()) w.append(String.format(Locale.US, 
-				"heading=\"%.2f\" ",heading));
-		if(hasAltitude()) w.append(String.format(Locale.US, 
-				"alt=\"%.2f\" ",alt));
-		w.append("/>\n");
+	public void writeLocationTag(XmlSerializer xmlSerializer) throws IOException {
+		xmlSerializer.startTag("", "position");
+		xmlSerializer.attribute("", "lat", String.format(Locale.US, "%.6f", lat));
+		xmlSerializer.attribute("", "lon", String.format(Locale.US, "%.6f", lon));
+
+		if(hasHeading()) {
+			xmlSerializer.attribute("", "heading", String.format(Locale.US, "%.2f", heading));
+		}
+
+		if(hasAltitude()) {
+			xmlSerializer.attribute("", "alt", String.format(Locale.US, "%.2f", alt));
+		}
+
+		xmlSerializer.endTag("", "position");
 	}
-	
+
 	public GeoPoint getGeoPoint() {
 		GeoPoint res = new GeoPoint(lat,lon);
 		if(hasAltitude()) res.setAltitude((int) alt);

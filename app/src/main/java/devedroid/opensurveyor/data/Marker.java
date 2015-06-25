@@ -8,6 +8,7 @@ import java.util.Date;
 
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
+import org.xmlpull.v1.XmlSerializer;
 
 import android.content.res.Resources;
 import android.location.Location;
@@ -125,17 +126,25 @@ public abstract class Marker implements Serializable {
 	
 	public abstract String getDesc(Resources res);
 	
-	protected abstract void writeDataPart(Writer w) throws IOException;
+	protected abstract void writeDataPart(XmlSerializer xmlSerializer) throws IOException;
 	
-	public void writeXML(Writer w)  throws IOException {
-		w.append("\t<point time=\"").append(Utils.formatISOTime(new Date(getTimestamp()))).append("\" ");
-		if(hasDirection()) 
-			w.append("dir=\"").append(getDirection().getXMLName()).append("\" ");
-		w.append(">\n");
-		if(hasLocation())	location.writeLocationTag(w);
-		writeDataPart(w);
-		
-		w.append("\t</point>\n");
+	public void writeXML(XmlSerializer xmlSerializer)  throws IOException {
+
+		xmlSerializer.startTag("", "point");
+
+		xmlSerializer.attribute("", "time", Utils.formatISOTime(new Date(getTimestamp())));
+
+		if(hasDirection()) {
+			xmlSerializer.attribute("", "dir", getDirection().getXMLName());
+		}
+
+		if(hasLocation()) {
+			location.writeLocationTag(xmlSerializer);
+		}
+
+		writeDataPart(xmlSerializer);
+
+		xmlSerializer.startTag("", "point");
 	}
 
 	public BasePreset getPreset() {

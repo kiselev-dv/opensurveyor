@@ -10,71 +10,51 @@ import java.util.List;
 import java.util.Locale;
 
 import org.osmdroid.api.IGeoPoint;
+import org.xmlpull.v1.XmlSerializer;
 
 import android.content.res.Resources;
 import android.location.Location;
 import devedroid.opensurveyor.Utils;
 
 public class Drawing extends Marker {
-	
+
 	//protected LocationData location;
-	
+
 	private List<List<IGeoPoint> > data = new ArrayList<List<IGeoPoint>>();
-	
+
 	private int color = 0xFF000000;
 	private int width = 4;
-	
-	//protected  long timeStamp;
 
-//	public LocationData getLocation() {
-//		return location;
-//	}
-//	public void setLocation(Location location) {
-//		if(location==null) 
-//			this.location = null; 
-//		else
-//			this.location = new LocationData(location);
-//	}
-//	
-//	public void setLocation(LocationData location) {
-//		if(location==null) 
-//			this.location = null; 
-//		else
-//			this.location = new LocationData(location);
-//	}
-//	public void setLocation(IGeoPoint location) {
-//		if(location==null) 
-//			this.location = null; 
-//		else
-//			this.location = new LocationData(location);
-//	}
-//
-//	public long getTimestamp() {
-//		return timeStamp;
-//	}
-//	public void setTimestamp(long timeStamp) {
-//		this.timeStamp = timeStamp;
-//	}
+	@Override
+	public void writeXML(XmlSerializer xmlSerializer)  throws IOException {
+		xmlSerializer.startTag("", "drawing");
 
-	
-	public void writeXML(Writer w)  throws IOException {
-		w.append("\t<drawing time=\"").append(Utils.formatISOTime(new Date(getTimestamp()))).append("\" ");
-		w.append("color=\"").append(Integer.toHexString(color) ).append("\" ");
-		w.append("thickness=\"").append(""+width).append("\" ");
-		w.append(">\n");
+		xmlSerializer.attribute("", "time", Utils.formatISOTime(new Date(getTimestamp())));
+		xmlSerializer.attribute("", "color", Integer.toHexString(color));
+		xmlSerializer.attribute("", "thickness", String.valueOf(width));
+
 		for(List<IGeoPoint> segment: data) {
-			w.append("\t<segment>\n");
-			for( IGeoPoint pt: segment) {
-				w.append(String.format(Locale.US, 
-						"\t\t<pt lat=\"%.6f\" lon=\"%.6f\">\n", 
-						pt.getLatitudeE6()*1e-6d, pt.getLongitudeE6()*1e-6d));
+			xmlSerializer.startTag("", "segment");
+			for( IGeoPoint pt: segment ) {
+				xmlSerializer.startTag("", "pt");
+
+				xmlSerializer.attribute("", "lat", String.format(Locale.US, "%.6f", pt.getLatitudeE6() * 1e-6d));
+				xmlSerializer.attribute("", "lon", String.format(Locale.US, "%.6f", pt.getLongitudeE6() * 1e-6d));
+
+				xmlSerializer.endTag("", "pt");
 			}
-			w.append("\t</segment>\n");
+			xmlSerializer.endTag("", "segment");
 		}
-		w.append("\t</drawing>\n");
+
+		xmlSerializer.endTag("", "drawing");
 	}
-	
-	
+
+	@Override
+	protected void writeDataPart(XmlSerializer xmlSerializer) throws IOException {
+		//Do nothing
+	}
+
+
 	public void setData(List<List<IGeoPoint>> data) {
 		this.data = data;
 		if(!data.isEmpty() && !data.get(0).isEmpty())
@@ -85,11 +65,6 @@ public class Drawing extends Marker {
 	@Override
 	public String getDesc(Resources res) {
 		return "Drawing";
-	}
-
-
-	@Override
-	protected void writeDataPart(Writer w) throws IOException {
 	}
 
 

@@ -1,5 +1,9 @@
 package devedroid.opensurveyor.data;
 
+import android.util.Xml;
+
+import org.xmlpull.v1.XmlSerializer;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -62,15 +66,27 @@ public class Session implements Serializable {
 	}
 	
 	public void writeTo(Writer os) throws IOException {
-		os.write("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
-		os.write("<survey " +
-				"start=\""+Utils.formatISOTime(new Date(startTime))+"\" " +
-				"end=\""+Utils.formatISOTime(new Date(endTime))+"\">\n");
+
+		XmlSerializer xmlSerializer = Xml.newSerializer();
+		xmlSerializer.setOutput(os);
+
+		// xml header
+		xmlSerializer.startDocument("utf-8", true);
+
+		// root survey element
+		xmlSerializer.startTag("", "survey");
+
+		// start and end time
+		xmlSerializer.attribute("", "start", Utils.formatISOTime(new Date(startTime)));
+		xmlSerializer.attribute("", "start", Utils.formatISOTime(new Date(endTime)));
+
 		for(Marker p: markers) {
-			os.write("  ");
-			p.writeXML(os);
+			p.writeXML(xmlSerializer);
 		}
-		os.write("</survey>\n");
+
+		xmlSerializer.endTag("", "survey");
+		xmlSerializer.endDocument();
+
 		os.flush();
 	}
 	

@@ -1,12 +1,14 @@
 package devedroid.opensurveyor.data;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.content.res.Resources;
 import android.location.Location;
+
+import org.xmlpull.v1.XmlSerializer;
+
 import devedroid.opensurveyor.R;
 import devedroid.opensurveyor.presets.BasePreset;
 import devedroid.opensurveyor.presets.POIPreset;
@@ -60,21 +62,29 @@ public class POI extends Marker {
 	}
 
 	@Override
-	protected void writeDataPart(Writer w) throws IOException {
-		w.append("\t\t<poi type=\"").append(type).append("\"/>\n");
-		if (generatedText != null)
-			w.append("\t\t<text generated=\"yes\">").append(generatedText)
-					.append("</text>\n");
-		w.append(formatProperties());
+	protected void writeDataPart(XmlSerializer xmlSerializer) throws IOException {
+
+		xmlSerializer.startTag("", "poi");
+		xmlSerializer.attribute("", "type", getType());
+		xmlSerializer.endTag("", "poi");
+
+		if (generatedText != null) {
+			xmlSerializer.startTag("", "text");
+			xmlSerializer.attribute("", "generated", "yes");
+			xmlSerializer.text(generatedText);
+			xmlSerializer.endTag("", "text");
+		}
+
+		writeProperties(xmlSerializer);
 	}
 
-	private String formatProperties() {
-		StringBuilder s = new StringBuilder();
+	private void writeProperties(XmlSerializer xmlSerializer) throws IOException {
 		for (Map.Entry<PropertyDefinition, String> e : props.entrySet()) {
-			s.append("\t\t<property k=\"" + e.getKey().key + "\" v=\""
-					+ e.getValue() + "\" />\n");
+			xmlSerializer.startTag("", "property");
+			xmlSerializer.attribute("", "k", e.getKey().key);
+			xmlSerializer.attribute("", "v", e.getValue());
+			xmlSerializer.endTag("", "property");
 		}
-		return s.toString();
 	}
 
 	@Override

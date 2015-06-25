@@ -8,6 +8,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import android.content.res.Resources;
+
+import org.xmlpull.v1.XmlSerializer;
+
 import devedroid.opensurveyor.R;
 import devedroid.opensurveyor.presets.CameraPreset;
 
@@ -27,9 +30,8 @@ public class PictureMarker extends MarkerWithExternals {
 	}
 
 	@Override
-	protected void writeDataPart(Writer w) throws IOException {
-		w.append("\t\t<attachment type=\"image/jpeg\" src=\"").append(new File(fileName).getName() )
-				.append("\"/>\n");
+	public String getExternalType() {
+		return "image/jpeg";
 	}
 
 	@Override

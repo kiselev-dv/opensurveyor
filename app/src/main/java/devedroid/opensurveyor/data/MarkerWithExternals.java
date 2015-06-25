@@ -9,9 +9,13 @@ import devedroid.opensurveyor.presets.BasePreset;
 
 import android.content.res.Resources;
 
+import org.xmlpull.v1.XmlSerializer;
+
 public abstract class MarkerWithExternals extends Marker {
 	protected String fileName;
-	
+
+	public abstract String getExternalType();
+
 	public MarkerWithExternals(BasePreset t) {
 		super(t);
 	}
@@ -26,5 +30,15 @@ public abstract class MarkerWithExternals extends Marker {
 	}
 	
 	public abstract ExternalPackage getExternals() ;
+
+	@Override
+	protected void writeDataPart(XmlSerializer xmlSerializer) throws IOException {
+		xmlSerializer.startTag("", "attachment");
+
+		xmlSerializer.attribute("", "type", getExternalType());
+		xmlSerializer.attribute("", "src", new File(fileName).getName());
+
+		xmlSerializer.endTag("", "attachment");
+	}
 
 }

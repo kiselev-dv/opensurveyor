@@ -5,6 +5,7 @@ import java.io.Writer;
 
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
+import org.xmlpull.v1.XmlSerializer;
 
 import android.content.res.Resources;
 import android.location.Location;
@@ -36,14 +37,21 @@ public class TextMarker extends Marker {
 		this.text = text;
 	}
 	
-	//TODO: escape text part correctly
 	@Override
-	protected void writeDataPart(Writer w) throws IOException {
-		if(text==null || text.length()==0) 
-			w.append("\t\t<text generated=\"yes\">").append(generatedText).append("</text>\n");
-		else
-			w.append("\t\t<text>").append(text).append("</text>\n");
+	protected void writeDataPart(XmlSerializer xmlSerializer) throws IOException {
+		xmlSerializer.startTag("", "text");
+
+		if(text==null || text.length()==0) {
+			xmlSerializer.attribute("", "generated", "yes");
+			xmlSerializer.text(generatedText);
+		}
+		else {
+			xmlSerializer.text(text);
+		}
+
+		xmlSerializer.endTag("", "text");
 	}
+
 	@Override
 	public String getDesc(Resources res) {
 		String v = (text==null || text.length()==0) ? generatedText : text; 

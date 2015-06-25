@@ -8,6 +8,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import android.content.res.Resources;
+
+import org.xmlpull.v1.XmlSerializer;
+
 import devedroid.opensurveyor.R;
 import devedroid.opensurveyor.presets.AudioRecordPreset;
 
@@ -26,9 +29,8 @@ public class AudioRecordMarker extends MarkerWithExternals {
 	}
 
 	@Override
-	protected void writeDataPart(Writer w) throws IOException {
-		w.append("\t\t<attachment type=\"audio/3gp\" src=\"").append(new File(fileName).getName() )
-				.append("\"/>\n");
+	public String getExternalType() {
+		return "audio/3gp";
 	}
 
 	@Override
