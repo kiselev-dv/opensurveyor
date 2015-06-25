@@ -36,6 +36,6 @@
 		android:id="@+id/mi_settings"
 		android:icon="@android:drawable/ic_menu_manage"
 		android:title="@string/menu_settings"
-		android:visible="false"/>
+		android:visible="true"/>
 	
 </menu>

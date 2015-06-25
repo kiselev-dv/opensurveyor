@@ -1,26 +1,28 @@
 <preset name="Тест" name:en="Test" lang="ru">
-  <button label="Магазин" label:en="Shop" icon="shop_convenience" directional="yes">
+
+  <button label="Магазин" label:en="Shop" icon="shop_convenience" directional="yes" hot_keys="KEYCODE_4">
     <poi type="shop_convenience" />
     <properties>
       <property name="Название" name:en="Title" k="title" />
     </properties>
   </button>
-  <button label="Освещение" label:en="Lighting" toggle="yes">
+
+  <button label="Освещение" label:en="Lighting" toggle="yes" hot_keys="KEYCODE_5">
     <poi type="lit" />
     <properties>
       <property name="У дороги" name:en="Near road" k="near_road" type="boolean" />
     </properties>
   </button>
   
-  <button label="Зебра" label:en="Zebra cross">
+  <button label="Зебра" label:en="Zebra cross" hot_keys="KEYCODE_6">
   	<poi type="zebra"/>
   </button>
   
-  <button label="Мост" label:en="Bridge" toggle="yes">
+  <button label="Мост" label:en="Bridge" toggle="yes" hot_keys="KEYCODE_1">
   	<poi type="bridge"/>
   </button>
   
-  <button label="Населенный пункт" label:en="City limit">
+  <button label="Населенный пункт" label:en="City limit" hot_keys="KEYCODE_2">
     <poi type="city_limit" />
     <properties>
       <property name="фон" name:en="Sign background" k="colour:back" type="choice">
@@ -30,11 +32,12 @@
     </properties>
   </button>
   
-  <button label="Км. столб" label:en="Milestone" icon="highway_milestone">
+  <button label="Км. столб" label:en="Milestone" icon="highway_milestone" hot_keys="KEYCODE_3">
     <poi type="milestone" />
     <properties>
       <property name="км" name:en="distance" k="pk" type="sequence" />
       <property name="обр.км" name:en="reverse distance" k="pk:back" type="sequence" />
     </properties>
   </button>
+
 </preset>

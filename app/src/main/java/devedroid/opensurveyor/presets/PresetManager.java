@@ -144,6 +144,7 @@ public class PresetManager {
 		String sDir = parser.getAttributeValue(ns, "directional");
 		String sToggle = parser.getAttributeValue(ns, "toggle");
 		String icon = parser.getAttributeValue(ns, "icon");
+		String hotkeys = parser.getAttributeValue(ns, "hot_keys");
 		String type;
 
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -153,7 +154,7 @@ public class PresetManager {
 			String name = parser.getName();
 			if (name.equals("poi")) {
 				type = parser.getAttributeValue(ns, "type");
-				res = new POIPreset(title, type, icon);
+				res = new POIPreset(title, hotkeys, type, icon);
 				if (sDir != null)
 					res.setDirected(sDir.equals("yes"));
 				if (sToggle != null)

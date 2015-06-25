@@ -1,0 +1,9 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="track"
+        android:title="Write GPS track"
+        android:summary="This option, if true, allows OpenSurveyor to write GPS track it selves."
+        android:defaultValue="true" />
+
+</PreferenceScreen>

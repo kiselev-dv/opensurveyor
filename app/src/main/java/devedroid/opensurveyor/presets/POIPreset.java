@@ -21,8 +21,9 @@ public class POIPreset extends BasePreset {
 
 	private final List<PropertyDefinition> props;
 
-	public POIPreset(String title, String type, String icon, boolean toggle) {
-		super(title);
+
+	public POIPreset(String title, String hotkeys, String type, String icon, boolean toggle) {
+		super(title, hotkeys);
 		if (type == null)
 			this.type = title.toLowerCase();
 		else
@@ -32,16 +33,21 @@ public class POIPreset extends BasePreset {
 		this.toggle = toggle;
 	}
 
-	public POIPreset(String title, String type, String icon) {
-		this(title, type, icon, false);
+	public POIPreset(String title, String hotkeys, String type, String icon) {
+		this(title, hotkeys, type, icon, false);
 	}
 
+	/*
 	public POIPreset(String title, String type) {
 		this(title, type, null, false);
 	}
 
+	public POIPreset(String title, String hotKeys) {
+		this(title, hotKeys, null, null, false);
+	}*/
+
 	public POIPreset(String title) {
-		this(title, null, null, false);
+		this(title, null, null, null, false);
 	}
 
 	public void addProperty(PropertyDefinition p) {
@@ -87,6 +93,11 @@ public class POIPreset extends BasePreset {
 		}
 		res.setTag(this);
 		res.setText(title);
+
+		if(hotkeys != null && !hotkeys.isEmpty()) {
+			res.setText(title + "\n" + hotkeys.replaceAll("KEYCODE_", ""));
+		}
+
 		final ButtonTouchListener btl = new ButtonTouchListener(res);
 		if (isDirected())
 			res.setOnTouchListener(btl);

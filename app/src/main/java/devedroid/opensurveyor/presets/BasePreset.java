@@ -15,8 +15,16 @@ public abstract class BasePreset {
 	
 	public final String title;
 
+	public final String hotkeys;
+
 	public BasePreset(String title) {
 		this.title = title;
+		this.hotkeys = "";
+	}
+
+	public BasePreset(String title, String hotkeys) {
+		this.title = title;
+		this.hotkeys = hotkeys;
 	}
 
 	public abstract boolean isToggleButton() ;
@@ -34,8 +42,8 @@ public abstract class BasePreset {
 	}
 	
 	public abstract List<PropertyDefinition> getProperties();
-	
-	protected static class ButtonTouchListener 
+
+	protected static class ButtonTouchListener
 			implements View.OnTouchListener {
 		
 		private float sx,sy;

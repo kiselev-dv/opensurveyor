@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.FutureTask;
 
 import android.app.Activity;
@@ -31,6 +33,7 @@ import devedroid.opensurveyor.data.Session;
 import devedroid.opensurveyor.data.SessionManager;
 import devedroid.opensurveyor.data.TextMarker;
 import devedroid.opensurveyor.data.Tracker;
+import devedroid.opensurveyor.presets.BasePreset;
 import devedroid.opensurveyor.presets.CameraPreset;
 import devedroid.opensurveyor.presets.POIPreset;
 import devedroid.opensurveyor.presets.TextPreset;
@@ -50,6 +53,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private static final String PREF_SESSION = "session";
 
 	private Tracker tracker = new Tracker();
+
+	private Map<Integer, BasePreset> keyBindings = new HashMap<Integer, BasePreset>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,14 +88,23 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 	}
 
+	public void registerKeyBinding(int keyCode, BasePreset preset) {
+		keyBindings.put(keyCode, preset);
+	}
+
+	public void clearKeyBinding() {
+		keyBindings.clear();
+	}
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if(keyCode == KeyEvent.KEYCODE_0) {
+		BasePreset preset = keyBindings.get(keyCode);
 
-			Utils.logd(this, "KEY_0 pressed. Add text marker.");
-            addMarker(new POI(new POIPreset("Test")));
-
+		if(preset != null) {
+			if(preset instanceof POIPreset) {
+				addMarker(new POI((POIPreset)preset));
+			}
             return true;
         }
 
@@ -204,6 +218,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 				return false;
 			case R.id.mi_gps_system_settings:
 				startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+				return true;
+			case R.id.mi_settings:
+				startActivity(new Intent(this, SettingsActivity.class));
 				return true;
 		}
 		return true;

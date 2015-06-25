@@ -15,6 +15,7 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Display;
+import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -241,7 +242,18 @@ public class ButtonUIFragment extends SherlockFragment implements SessionListene
 				display.getHeight(), root.getRight(), root.getBottom(),
 				flow.getWidth(), flow.getHeight()));
 
+		parent.clearKeyBinding();
+
 		for (BasePreset p : presets) {
+
+			String[] bindings = (p.hotkeys == null ? "" : p.hotkeys).split(",");
+			for(String key : bindings) {
+				int keyCode = KeyEvent.keyCodeFromString(key);
+				if(keyCode != 0) {
+					parent.registerKeyBinding(keyCode, p);
+				}
+			}
+
 			Button bt = p.createButton(root.getContext(), parent);
 			bt.setWidth(width);
 			bt.setHeight(height);
