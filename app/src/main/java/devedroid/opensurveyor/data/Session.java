@@ -14,6 +14,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -25,6 +26,8 @@ public class Session implements Serializable {
 	private int externalCount;
 	
 	private List<Marker> markers = new ArrayList<Marker>();
+
+	private List<TrackPoint> track = new ArrayList<TrackPoint>();
 	
 	public Session() {
 		startTime = System.currentTimeMillis();
@@ -60,6 +63,12 @@ public class Session implements Serializable {
 		}
 		out.close();
 	}
+
+	public void trackLocation(LocationData ld) {
+		if(isRunning()) {
+			track.add(new TrackPoint(ld));
+		}
+	}
 	
 	public boolean hasExternals() {
 		return externalCount!=0;
@@ -84,12 +93,60 @@ public class Session implements Serializable {
 			p.writeXML(xmlSerializer);
 		}
 
+		writeTrack(xmlSerializer);
+
 		xmlSerializer.endTag("", "survey");
 		xmlSerializer.endDocument();
 
 		os.flush();
 	}
-	
+
+	private void writeTrack(XmlSerializer xmlSerializer) throws IOException{
+		if(!track.isEmpty()) {
+			xmlSerializer.startTag("gpx", "gpx");
+
+			xmlSerializer.attribute("gpx", "version", "1.1");
+			xmlSerializer.attribute("gpx", "creator", "OpenSurveyor");
+			xmlSerializer.attribute("gpx", "creator-version", "1.0b");
+
+			xmlSerializer.startTag("gpx", "trk");
+			xmlSerializer.startTag("gpx", "trkseg");
+
+			for(TrackPoint tp : track) {
+				LocationData p = tp.getLocation();
+				Date time = tp.getTime();
+
+				xmlSerializer.startTag("gpx", "trkpt");
+
+				xmlSerializer.attribute("gpx", "lat", String.format(Locale.US, "%.6f", p.lat));
+				xmlSerializer.attribute("gpx", "lon", String.format(Locale.US, "%.6f", p.lon));
+
+				xmlSerializer.startTag("gpx", "time");
+				xmlSerializer.text(Utils.formatISOTime(time));
+				xmlSerializer.endTag("gpx", "time");
+
+				if(p.hasHeading()) {
+					xmlSerializer.startTag("gpx", "magvar");
+					xmlSerializer.text(String.format(Locale.US, "%.2f", p.heading));
+					xmlSerializer.endTag("gpx", "magvar");
+				}
+
+				if(p.hasAltitude()) {
+					xmlSerializer.startTag("gpx", "ele");
+					xmlSerializer.text(String.format(Locale.US, "%.2f", p.alt));
+					xmlSerializer.endTag("gpx", "ele");
+				}
+
+				xmlSerializer.endTag("gpx", "trkpt");
+			}
+
+			xmlSerializer.endTag("gpx", "trkseg");
+			xmlSerializer.endTag("gpx", "trk");
+
+			xmlSerializer.endTag("gpx", "gpx");
+		}
+	}
+
 	public Iterable<Marker> getMarkers() {
 		return markers;
 	}
@@ -116,6 +173,5 @@ public class Session implements Serializable {
 	public void deleteMarker(Marker m) {
 		markers.remove(m);
 	}
-
 
 }

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.FutureTask;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,12 +30,9 @@ import devedroid.opensurveyor.data.POI;
 import devedroid.opensurveyor.data.PictureMarker;
 import devedroid.opensurveyor.data.Session;
 import devedroid.opensurveyor.data.SessionManager;
-import devedroid.opensurveyor.data.TextMarker;
-import devedroid.opensurveyor.data.Tracker;
 import devedroid.opensurveyor.presets.BasePreset;
 import devedroid.opensurveyor.presets.CameraPreset;
 import devedroid.opensurveyor.presets.POIPreset;
-import devedroid.opensurveyor.presets.TextPreset;
 
 public class MainActivity extends SherlockFragmentActivity implements
 		SessionManager {
@@ -51,8 +47,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	private static final String PREF_UI = "ui";
 	private static final String PREF_SESSION = "session";
-
-	private Tracker tracker = new Tracker();
 
 	private Map<Integer, BasePreset> keyBindings = new HashMap<Integer, BasePreset>();
 
@@ -144,7 +138,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 			@Override
 			public void onLocationChanged(Location location) {
-				tracker.addPoint(new LocationData(location));
+				sess.trackLocation(new LocationData(location));
 			}
 
 		});
