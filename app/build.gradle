@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion 14
     buildToolsVersion "22.0.1"
@@ -16,11 +15,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-}
 
+    sourceSets.main.jniLibs.srcDirs = ['libs']
+    //sourceSets.main.assets.srcDirs = ['app/src/main/assets']
+}
 dependencies {
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile 'com.android.support:support-v4:22.2.0'
     compile 'org.osmdroid:osmdroid-android:4.3'
     compile 'org.slf4j:slf4j-android:1.7.12'
+    compile files ('libs/GLMap.jar', 'libs/protobuf-java-2.6.1.jar')
 }

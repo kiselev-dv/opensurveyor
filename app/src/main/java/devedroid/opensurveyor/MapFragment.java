@@ -32,6 +32,8 @@ import com.actionbarsherlock.view.ActionMode.Callback;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.glmapview.GLMapManager;
+import com.glmapview.GLMapView;
 
 import devedroid.opensurveyor.data.Drawing;
 import devedroid.opensurveyor.data.LocationData;
@@ -78,24 +80,38 @@ public class MapFragment extends SherlockFragment implements SessionListener {
 			@Override
 			public void onClick(View v) {
 				//parent.addMarker(new TextMarker(map.getMapCenter(), "preved"));
+
+				/*
 				parent.startActionMode( newMarkerCallback );
 				markerEditOverlay = new MarkerEditOverlay(parent, map);
 				map.getOverlays().add(markerEditOverlay);
 				map.invalidate();
 				v.setEnabled(false);
+				*/
 			}
 		});
 		Button btFreehand = (Button) root.findViewById(R.id.bt_free_hand);
 		btFreehand.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				/*
 				parent.startActionMode( freehandCallback );
 				freehandOverlay = new FreehandOverlay(parent, map);
 				map.getOverlays().add(freehandOverlay);
 				v.setEnabled(false);
+				*/
 			}
 		});
 
+		// init GLMapManager with activity and your API key
+		GLMapManager.initialize(parent, "3b0e3a19-75a0-4e46-b112-90f776c12c0c", null);
+
+		// set asset manager, and load style from bundle inside assets
+		GLMapView mapView = (GLMapView) root.findViewById(R.id.map_view);
+		mapView.setAssetManager(root.getContext().getAssets());
+		mapView.loadStyle("DefaultStyle.bundle");
+
+		/*
 		map = (MapView) root.findViewById(R.id.mapview);
 		map.setClickable(false);
 		map.setTileSource(TileSourceFactory.MAPNIK);
@@ -142,7 +158,7 @@ public class MapFragment extends SherlockFragment implements SessionListener {
 		map.getOverlays().add( drawingsOverlay );
 
 		map.getOverlays().add(new ScaleBarOverlay(parent));
-
+		*/
 		return root;
 	}
 
