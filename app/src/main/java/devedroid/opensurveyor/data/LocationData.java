@@ -48,19 +48,19 @@ public class LocationData implements Serializable{
 	
 	
 	public void writeLocationTag(XmlSerializer xmlSerializer) throws IOException {
-		xmlSerializer.startTag("", "position");
-		xmlSerializer.attribute("", "lat", String.format(Locale.US, "%.6f", lat));
-		xmlSerializer.attribute("", "lon", String.format(Locale.US, "%.6f", lon));
+		xmlSerializer.startTag(null, "position");
+		xmlSerializer.attribute(null, "lat", String.format(Locale.US, "%.6f", lat));
+		xmlSerializer.attribute(null, "lon", String.format(Locale.US, "%.6f", lon));
 
 		if(hasHeading()) {
-			xmlSerializer.attribute("", "heading", String.format(Locale.US, "%.2f", heading));
+			xmlSerializer.attribute(null, "heading", String.format(Locale.US, "%.2f", heading));
 		}
 
 		if(hasAltitude()) {
-			xmlSerializer.attribute("", "alt", String.format(Locale.US, "%.2f", alt));
+			xmlSerializer.attribute(null, "alt", String.format(Locale.US, "%.2f", alt));
 		}
 
-		xmlSerializer.endTag("", "position");
+		xmlSerializer.endTag(null, "position");
 	}
 
 	public GeoPoint getGeoPoint() {

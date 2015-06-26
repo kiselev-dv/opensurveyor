@@ -39,17 +39,17 @@ public class TextMarker extends Marker {
 	
 	@Override
 	protected void writeDataPart(XmlSerializer xmlSerializer) throws IOException {
-		xmlSerializer.startTag("", "text");
+		xmlSerializer.startTag(null, "text");
 
-		if(text==null || text.length()==0) {
-			xmlSerializer.attribute("", "generated", "yes");
+		if(text == null || text.length() == 0) {
+			xmlSerializer.attribute(null, "generated", "yes");
 			xmlSerializer.text(generatedText);
 		}
 		else {
 			xmlSerializer.text(text);
 		}
 
-		xmlSerializer.endTag("", "text");
+		xmlSerializer.endTag(null, "text");
 	}
 
 	@Override

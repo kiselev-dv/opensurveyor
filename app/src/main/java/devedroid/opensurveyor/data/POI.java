@@ -64,15 +64,15 @@ public class POI extends Marker {
 	@Override
 	protected void writeDataPart(XmlSerializer xmlSerializer) throws IOException {
 
-		xmlSerializer.startTag("", "poi");
-		xmlSerializer.attribute("", "type", getType());
-		xmlSerializer.endTag("", "poi");
+		xmlSerializer.startTag(null, "poi");
+		xmlSerializer.attribute(null, "type", getType());
+		xmlSerializer.endTag(null, "poi");
 
 		if (generatedText != null) {
-			xmlSerializer.startTag("", "text");
-			xmlSerializer.attribute("", "generated", "yes");
+			xmlSerializer.startTag(null, "text");
+			xmlSerializer.attribute(null, "generated", "yes");
 			xmlSerializer.text(generatedText);
-			xmlSerializer.endTag("", "text");
+			xmlSerializer.endTag(null, "text");
 		}
 
 		writeProperties(xmlSerializer);
@@ -80,10 +80,10 @@ public class POI extends Marker {
 
 	private void writeProperties(XmlSerializer xmlSerializer) throws IOException {
 		for (Map.Entry<PropertyDefinition, String> e : props.entrySet()) {
-			xmlSerializer.startTag("", "property");
-			xmlSerializer.attribute("", "k", e.getKey().key);
-			xmlSerializer.attribute("", "v", e.getValue());
-			xmlSerializer.endTag("", "property");
+			xmlSerializer.startTag(null, "property");
+			xmlSerializer.attribute(null, "k", e.getKey().key);
+			xmlSerializer.attribute(null, "v", e.getValue());
+			xmlSerializer.endTag(null, "property");
 		}
 	}
 

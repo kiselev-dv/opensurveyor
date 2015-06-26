@@ -130,12 +130,12 @@ public abstract class Marker implements Serializable {
 	
 	public void writeXML(XmlSerializer xmlSerializer)  throws IOException {
 
-		xmlSerializer.startTag("", "point");
+		xmlSerializer.startTag(null, "point");
 
-		xmlSerializer.attribute("", "time", Utils.formatISOTime(new Date(getTimestamp())));
+		xmlSerializer.attribute(null, "time", Utils.formatISOTime(new Date(getTimestamp())));
 
 		if(hasDirection()) {
-			xmlSerializer.attribute("", "dir", getDirection().getXMLName());
+			xmlSerializer.attribute(null, "dir", getDirection().getXMLName());
 		}
 
 		if(hasLocation()) {
@@ -144,7 +144,7 @@ public abstract class Marker implements Serializable {
 
 		writeDataPart(xmlSerializer);
 
-		xmlSerializer.startTag("", "point");
+		xmlSerializer.endTag(null, "point");
 	}
 
 	public BasePreset getPreset() {

@@ -33,12 +33,12 @@ public abstract class MarkerWithExternals extends Marker {
 
 	@Override
 	protected void writeDataPart(XmlSerializer xmlSerializer) throws IOException {
-		xmlSerializer.startTag("", "attachment");
+		xmlSerializer.startTag(null, "attachment");
 
-		xmlSerializer.attribute("", "type", getExternalType());
-		xmlSerializer.attribute("", "src", new File(fileName).getName());
+		xmlSerializer.attribute(null, "type", getExternalType());
+		xmlSerializer.attribute(null, "src", new File(fileName).getName());
 
-		xmlSerializer.endTag("", "attachment");
+		xmlSerializer.endTag(null, "attachment");
 	}
 
 }

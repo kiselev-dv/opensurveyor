@@ -1,10 +1,12 @@
 package devedroid.opensurveyor.data;
 
 import android.util.Xml;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -79,26 +81,32 @@ public class Session implements Serializable {
 		XmlSerializer xmlSerializer = Xml.newSerializer();
 		xmlSerializer.setOutput(os);
 
-		// xml header
-		xmlSerializer.startDocument("utf-8", true);
+		try {
 
-		// root survey element
-		xmlSerializer.startTag("", "survey");
+			// xml header
+			xmlSerializer.startDocument("utf-8", true);
 
-		// start and end time
-		xmlSerializer.attribute("", "start", Utils.formatISOTime(new Date(startTime)));
-		xmlSerializer.attribute("", "start", Utils.formatISOTime(new Date(endTime)));
+			// root survey element
+			xmlSerializer.startTag(null, "survey");
 
-		for(Marker p: markers) {
-			p.writeXML(xmlSerializer);
+			// start and end time
+			xmlSerializer.attribute(null, "start", Utils.formatISOTime(new Date(startTime)));
+			xmlSerializer.attribute(null, "end", Utils.formatISOTime(new Date(endTime)));
+
+			for(Marker p: markers) {
+				p.writeXML(xmlSerializer);
+			}
+
+			writeTrack(xmlSerializer);
+
+			xmlSerializer.endTag(null, "survey");
+			xmlSerializer.endDocument();
+			xmlSerializer.flush();
+		}
+		catch (IllegalArgumentException e) {
+			e.printStackTrace();
 		}
 
-		writeTrack(xmlSerializer);
-
-		xmlSerializer.endTag("", "survey");
-		xmlSerializer.endDocument();
-
-		os.flush();
 	}
 
 	private void writeTrack(XmlSerializer xmlSerializer) throws IOException{

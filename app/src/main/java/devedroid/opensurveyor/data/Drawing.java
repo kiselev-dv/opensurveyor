@@ -27,26 +27,26 @@ public class Drawing extends Marker {
 
 	@Override
 	public void writeXML(XmlSerializer xmlSerializer)  throws IOException {
-		xmlSerializer.startTag("", "drawing");
+		xmlSerializer.startTag(null, "drawing");
 
-		xmlSerializer.attribute("", "time", Utils.formatISOTime(new Date(getTimestamp())));
-		xmlSerializer.attribute("", "color", Integer.toHexString(color));
-		xmlSerializer.attribute("", "thickness", String.valueOf(width));
+		xmlSerializer.attribute(null, "time", Utils.formatISOTime(new Date(getTimestamp())));
+		xmlSerializer.attribute(null, "color", Integer.toHexString(color));
+		xmlSerializer.attribute(null, "thickness", String.valueOf(width));
 
 		for(List<IGeoPoint> segment: data) {
-			xmlSerializer.startTag("", "segment");
+			xmlSerializer.startTag(null, "segment");
 			for( IGeoPoint pt: segment ) {
-				xmlSerializer.startTag("", "pt");
+				xmlSerializer.startTag(null, "pt");
 
-				xmlSerializer.attribute("", "lat", String.format(Locale.US, "%.6f", pt.getLatitudeE6() * 1e-6d));
-				xmlSerializer.attribute("", "lon", String.format(Locale.US, "%.6f", pt.getLongitudeE6() * 1e-6d));
+				xmlSerializer.attribute(null, "lat", String.format(Locale.US, "%.6f", pt.getLatitudeE6() * 1e-6d));
+				xmlSerializer.attribute(null, "lon", String.format(Locale.US, "%.6f", pt.getLongitudeE6() * 1e-6d));
 
-				xmlSerializer.endTag("", "pt");
+				xmlSerializer.endTag(null, "pt");
 			}
-			xmlSerializer.endTag("", "segment");
+			xmlSerializer.endTag(null, "segment");
 		}
 
-		xmlSerializer.endTag("", "drawing");
+		xmlSerializer.endTag(null, "drawing");
 	}
 
 	@Override
